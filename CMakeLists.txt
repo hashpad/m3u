@@ -11,28 +11,31 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network Sql)
 
 add_executable(myapp
     main.cpp
-    include/MainWindow.h
+    include/ui/MainWindow.h
     src/MainWindow.cpp
     src/ui/MainWindow.ui
 
-	include/SettingsDialog.h
+	include/ui/SettingsDialog.h
 	src/SettingsDialog.cpp
 	src/ui/SettingsDialog.ui
 
-	include/AddProviderDialog.h
+	include/ui/AddProviderDialog.h
 	src/AddProviderDialog.cpp
 	src/ui/AddProviderDialog.ui
 
 
 	src/m3u/M3UUtils.cpp
-	src/m3u/M3UUtils.h
+	include/m3u/M3UUtils.h
+
+	src/db/sql.cpp
+	include/db/sql.h
 )
 
 target_include_directories(myapp PRIVATE include)
 
-target_link_libraries(myapp PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network)
+target_link_libraries(myapp PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Sql)
 

@@ -1,14 +1,24 @@
-#include "MainWindow.h"
+#include "ui/MainWindow.h"
 
-#include "SettingsDialog.h"
+#include <qmainwindow.h>
+#include <qwidget.h>
+
+#include "ui/MainWindow.h"
+#include "ui/SettingsDialog.h"
 #include "ui_MainWindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(AppContext& ctx, QWidget* parent)
+    : QMainWindow(parent), ctx(ctx), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 }
+MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_SettingsButton_clicked() {
-    SettingsDialog dlg(this);
+    SettingsDialog dlg(ctx, this);
     dlg.exec();
 }
-MainWindow::~MainWindow() { delete ui; }
+void MainWindow::on_LiveStreamButton_clicked() {
+    ui->MainStackedWidget->setCurrentWidget(ui->LiveStreamPage);
+}
+void MainWindow::on_MainBackButton_clicked() {
+    ui->MainStackedWidget->setCurrentWidget(ui->MainPage);
+}
