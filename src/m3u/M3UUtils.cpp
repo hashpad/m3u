@@ -36,14 +36,32 @@ void downloadM3U(const QUrl url, QObject *context,
         reply->deleteLater();
     });
 }
+static QString sanitize(QString input) { return input.remove('\r').trimmed(); }
 
 static QString getM3UInfo(const QString &entryString, const QString &info) {
     QRegularExpression infoRe(".* " + info + "=\\\"([^\\\"]+)");
     auto infoReMatch = infoRe.match(entryString);
     if (infoReMatch.hasMatch()) {
-        return infoReMatch.captured(1);
+        return sanitize(infoReMatch.captured(1));
     }
     return "";
+}
+
+static QString get(const QString &regex, const QString &entryString) {
+    QRegularExpression re(regex);
+    auto reMatch = re.match(entryString);
+    if (reMatch.hasMatch()) {
+        return sanitize(reMatch.captured(1));
+    }
+    return "";
+}
+
+static QString getName(const QString &entryString) {
+    return sanitize(get(".*,(.*)", entryString));
+}
+
+static QString getUrl(const QString &entryString) {
+    return sanitize(get(".*\n(.*)", entryString));
 }
 
 QList<M3UEntry> parseM3U(QString rawM3U) {
@@ -59,8 +77,8 @@ QList<M3UEntry> parseM3U(QString rawM3U) {
         attributes.insert("group-title",
                           getM3UInfo(entryString, "group-title"));
         entry.attributes = attributes;
-        entry.name = "";
-        entry.url = "";
+        entry.name = getName(entryString);
+        entry.url = getUrl(entryString);
 
         entries.append(entry);
     }

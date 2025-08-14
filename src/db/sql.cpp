@@ -31,7 +31,7 @@ bool DatabaseManager::addChannel(const Channel& channel) {
         qDebug() << "Add Channel resulted in an error: " << query.lastError();
     }
 
-    return true;
+    return success;
 }
 
 bool DatabaseManager::addGroup(const QString& groupName) {

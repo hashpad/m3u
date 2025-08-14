@@ -1,5 +1,8 @@
 #include "ui/SettingsDialog.h"
 
+#include <qlogging.h>
+
+#include <QDebug>
 #include <QMessageBox>
 #include <QSettings>
 
